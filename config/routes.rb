@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
+  root 'sessions#new'
+  #root 'admins#new'
+  get    'login'   => 'sessions#new'
+  post   'login'   => 'sessions#create'
+  delete 'logout'  => 'sessions#destroy'
+
   resources :library_members
   resources :admins
-  root 'admins#new'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
