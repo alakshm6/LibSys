@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @checkout_history.email %>
+</p>
+
+<p>
+  <strong>Isbn:</strong>
+  <%= @checkout_history.ISBN %>
+</p>
+
+<p>
+  <strong>Checkout timestamp:</strong>
+  <%= @checkout_history.checkout_timestamp %>
+</p>
+
+<p>
+  <strong>Return timestamp:</strong>
+  <%= @checkout_history.return_timestamp %>
+</p>
+
+<%= link_to 'Edit', edit_checkout_history_path(@checkout_history) %> |
+<%= link_to 'Back', checkout_histories_path %>
