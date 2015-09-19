@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Checkout Histories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Isbn</th>
+      <th>Checkout timestamp</th>
+      <th>Return timestamp</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @checkout_histories.each do |checkout_history| %>
+      <tr>
+        <td><%= checkout_history.email %></td>
+        <td><%= checkout_history.ISBN %></td>
+        <td><%= checkout_history.checkout_timestamp %></td>
+        <td><%= checkout_history.return_timestamp %></td>
+        <td><%= link_to 'Show', checkout_history %></td>
+        <td><%= link_to 'Edit', edit_checkout_history_path(checkout_history) %></td>
+        <td><%= link_to 'Destroy', checkout_history, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Checkout history', new_checkout_history_path %>
