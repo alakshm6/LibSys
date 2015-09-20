@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: [:show, :edit, :update, :destroy]
+  before_action :set_book, only: [:show, :edit, :update, :destroy, :checkout]
 
   # GET /books
   # GET /books.json
@@ -59,6 +59,41 @@ class BooksController < ApplicationController
       format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  # CHECKOUT books
+  def checkout
+    @book = Book.find(params[:id])
+    status = @book.status
+    if status == 'Available'
+      @book.status = 'Checked out'
+      @book.save
+      @user = User.find(session[:user_id])
+      @checkout_history = CheckoutHistory.new(:email => @user.email, :ISBN => @book.ISBN, :checkout_timestamp => DateTime.now.utc, :return_timestamp => DateTime.new(9999,12,31).utc)
+      @checkout_history.save
+      respond_to do |format|
+      format.html { redirect_to books_url, notice: 'Book was successfully checked out.' }
+      format.json { head :no_content }
+      end
+      else
+      @book.status = 'Available'
+      @book.save
+      @user = User.find(session[:user_id])
+      @checkout_history = CheckoutHistory.find_by_email_and_ISBN(@user.email, @book.ISBN)
+      @checkout_history.save
+      respond_to do |format|
+        format.html { redirect_to books_url, notice: 'Book was successfully returned.' }
+        format.json { head :no_content }
+      end
+      end
+  end
+
+  # RETURN books
+  def return
+    @book = Book.find(params[:id])
+    status = @book.status
+
+
   end
 
   private
