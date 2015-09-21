@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
   root 'sessions#new'
+  get    'admin_home' => 'users#admin_home'
+  get    'user_home'  => 'users#user_home'
+  get    'admin_index' => 'users#admin_index'
   get    'login'   => 'sessions#new'
   post   'login'   => 'sessions#create'
-  delete 'logout'  => 'sessions#destroy'
+  get    'logout'  => 'sessions#destroy'
 
   resources :checkout_histories
   resources :users
