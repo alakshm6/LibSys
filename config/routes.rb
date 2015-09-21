@@ -9,7 +9,9 @@ Rails.application.routes.draw do
 
   resources :books
 
+
   post '/books/:id' => 'books#checkout'
+  get '/books/:id' => 'books#capture_details'
 
 
 

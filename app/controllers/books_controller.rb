@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: [:show, :edit, :update, :destroy, :checkout]
+  before_action :set_book, only: [:show, :edit, :update, :destroy]
 
   # GET /books
   # GET /books.json
@@ -63,36 +63,49 @@ class BooksController < ApplicationController
 
   # CHECKOUT books
   def checkout
-    @book = Book.find(params[:id])
+    @user = User.find_by_id(session[:current_user_id])
+
+    @book = Book.find_by_id(params[:id])
     status = @book.status
+
+
     if status == 'Available'
       @book.status = 'Checked out'
       @book.save
-      @user = User.find(session[:user_id])
-      @checkout_history = CheckoutHistory.new(:email => @user.email, :ISBN => @book.ISBN, :checkout_timestamp => DateTime.now.utc, :return_timestamp => DateTime.new(9999,12,31).utc)
-      @checkout_history.save
-      respond_to do |format|
-      format.html { redirect_to books_url, notice: 'Book was successfully checked out.' }
-      format.json { head :no_content }
-      end
+
+      if (@user.user_type == 'A')
+
+        @checkout_history = CheckoutHistory.new(:ISBN => @book.ISBN, :checkout_timestamp => DateTime.now.utc, :return_timestamp => DateTime.new(9999,12,31).utc)
+        @checkout_history.save
+        respond_to do |format|
+              format.html { render :checkout_details }
+              format.json { render json: @book }
+            end
       else
+         @checkout_history = CheckoutHistory.new(:email => @user.email, :ISBN => @book.ISBN, :checkout_timestamp => DateTime.now.utc, :return_timestamp => DateTime.new(9999,12,31).utc)
+         @checkout_history.save
+         respond_to do |format|
+           format.html { redirect_to books_url, notice: 'Book was successfully checked out.' }
+           format.json { head :no_content }
+         end
+      end
+    else
       @book.status = 'Available'
       @book.save
-      @user = User.find(session[:user_id])
-      @checkout_history = CheckoutHistory.find_by_email_and_ISBN(@user.email, @book.ISBN)
+      @checkout_history = CheckoutHistory.find_by(ISBN: @book.ISBN)
+      @checkout_history.return_timestamp = DateTime.now.utc
       @checkout_history.save
       respond_to do |format|
         format.html { redirect_to books_url, notice: 'Book was successfully returned.' }
         format.json { head :no_content }
       end
-      end
-  end
 
-  # RETURN books
-  def return
-    @book = Book.find(params[:id])
-    status = @book.status
+    end
+    end
 
+  helper_method :checkout
+
+  def checkout_details
 
   end
 
