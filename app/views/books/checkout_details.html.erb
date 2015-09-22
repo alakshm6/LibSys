@@ -1,0 +1,44 @@
+<h1>Checkout details</h1>
+
+<p>
+  <strong>Isbn:</strong>
+  <%= @book.ISBN %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @book.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @book.description %>
+</p>
+
+<p>
+  <strong>Author:</strong>
+  <%= @book.author %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @book.status %>
+</p>
+
+<p>
+  <strong>Email ID of User</strong>
+</p>
+
+<%= form_for(@checkout_history) do |f|%>
+    <div class="field">
+      <%= f.label :email %><br>
+      <%= f.text_field :email %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit %>
+    </div>
+<% end %>
+
+
+
