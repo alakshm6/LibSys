@@ -10,29 +10,51 @@ class BooksController < ApplicationController
   # GET /books/1
   # GET /books/1.json
   def show
+    @book = Book.where(id: params[:id])
   end
 
   # GET /books/new
   def new
-    @book = Book.new
+    if check_if_admin
+      @book = Book.new
+    elsif check_if_user
+      respond_to do |format|
+        format.html{redirect_to user_home_path, notice: 'Users cannot add new books.'}
+      end
+    else
+      respond_to do |format|
+        format.html{redirect_to login_path, notice: 'Only logged in admins can add new books.'}
+      end
+    end
   end
 
   # GET /books/1/edit
   def edit
+    if check_if_admin
+      @book = Book.new
+    elsif check_if_user
+      respond_to do |format|
+        format.html{redirect_to user_home_path, notice: 'Users cannot add new books.'}
+      end
+    else
+      respond_to do |format|
+        format.html{redirect_to login_path, notice: 'Only logged in admins can add new books.'}
+      end
+    end
   end
 
   # POST /books
   # POST /books.json
   def create
-    @book = Book.new(book_params)
+    if check_if_admin
+      @book = Book.new(book_params)
 
-    respond_to do |format|
-      if @book.save
-        format.html { redirect_to @book, notice: 'Book was successfully created.' }
-        format.json { render :show, status: :created, location: @book }
-      else
-        format.html { render :new }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
+      respond_to do |format|
+        if @book.save
+          format.html { redirect_to @book, notice: 'Book was successfully created.' }
+        else
+          format.html { render :new }
+        end
       end
     end
   end
@@ -40,13 +62,13 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1
   # PATCH/PUT /books/1.json
   def update
-    respond_to do |format|
-      if @book.update(book_params)
-        format.html { redirect_to @book, notice: 'Book was successfully updated.' }
-        format.json { render :show, status: :ok, location: @book }
-      else
-        format.html { render :edit }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
+    if check_if_admin
+      respond_to do |format|
+        if @book.update(book_params)
+          format.html { redirect_to @book, notice: 'Book was successfully updated.' }
+        else
+          format.html { render :edit }
+        end
       end
     end
   end
@@ -54,10 +76,21 @@ class BooksController < ApplicationController
   # DELETE /books/1
   # DELETE /books/1.json
   def destroy
-    @book.destroy
-    respond_to do |format|
-      format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
-      format.json { head :no_content }
+    if check_if_admin
+      if @book.status == "Available"
+        @book.destroy
+        respond_to do |format|
+          format.html { redirect_to books_url, notice: 'Book was successfully destroyed.' }
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to books_url, notice: 'Book cannot be deleted now because it is not available.' }
+        end
+      end
+    else
+      respond_to do |format|
+        format.html { redirect_to user_home_path, notice: 'Only logged in admins can delete books' }
+      end
     end
   end
 
@@ -67,7 +100,6 @@ class BooksController < ApplicationController
 
     @book = Book.find_by_id(params[:id])
     status = @book.status
-
 
     if status == 'Available'
       @book.status = 'Checked out'

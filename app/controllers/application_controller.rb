@@ -25,4 +25,15 @@ class ApplicationController < ActionController::Base
     redirect_to login_path # halts request cycle
    end
   end
+
+  def check_if_user
+    return true if User.find_by_id(session[:current_user_id]).user_type == 'U'
+  end
+
+  def check_if_admin
+    return true if ['A','P'].include? User.find_by_id(session[:current_user_id]).user_type
+  end
+  def check_if_pre_configured_admin
+    return true if User.find_by_id(session[:current_user_id]).user_type == 'P'
+  end
 end
