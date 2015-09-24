@@ -88,14 +88,10 @@ class UsersController < ApplicationController
       elsif check_if_admin
         redirect_to admin_home_path,notice: "Admins do not have permissions to update other users"
       end
-    elsif ['A','P'].include?(user_params[:user_type])
-      if check_if_user
+    elsif ['A','P'].include?(user_params[:user_type]) && check_if_user
         redirect_to user_home_path, notice: "No sufficient permissions to edit admin"
-      end
-    elsif  user_params[:user_type] == 'U'
-      if check_if_admin
+    elsif  user_params[:user_type] == 'U' && check_if_admin
         redirect_to admin_home_path, notice: "No sufficient permissions to edit users"
-      end
     else
       respond_to do |format|
         if @user.update(user_params)
@@ -119,14 +115,20 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    if check_if_admin && @user.user_type != "P" && @user.id != User.find_by_id(session[:curent_user_id]).id
+    if check_if_admin && @user.user_type != "P" && @user.email != User.find_by_id(session[:current_user_id]).email
       @user.destroy
       respond_to do |format|
-        format.html { redirect_to users_url, notice: 'User was successfully deleted.' }
+        format.html { redirect_to admin_index_path, notice: 'User was successfully deleted.' }
       end
     else
+      if check_if_user
       respond_to do |format|
-        format.html { redirect_to users_url, notice: 'User cannot be deleted or there is no authorization to do so' }
+        format.html { redirect_to user_home_path, notice: 'User cannot be deleted or there is no authorization to do so' }
+      end
+      elsif check_if_admin && @user.email == User.find_by_id(session[:current_user_id]).email
+        redirect_to admin_home_path, notice: 'Admins cannot delete themselves'
+      else
+        redirect_to login_path, notice: 'User cannot be deleted or there is no authorization to do so'
       end
     end
   end
