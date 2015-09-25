@@ -1,4 +1,5 @@
 <%= provide(:title, "Welcome") %>
+
 <h4>My Profile</h4>
 <%= link_to 'View my profile', user_path(session[:current_user_id]) %><br/>
 <%= link_to 'Edit my profile', edit_user_path(session[:current_user_id]) %><br/>
@@ -7,4 +8,6 @@
 <%= link_to 'Checkout a book', books_path %><br/>
 <%= link_to 'Return a book', books_path %><br/>
 <%= link_to 'View list of books', books_path %><br/>
-<%= link_to 'View my Checkout history', checkout_histories_path %><br/>
+<% @user=User.find_by_id(session[:current_user_id])%>
+<% @checkout_history=CheckoutHistory.where(@user.email)%>
+<%= link_to 'View my checkout history', checkout_histories_path %>

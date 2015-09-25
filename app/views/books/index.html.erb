@@ -23,13 +23,25 @@
         <td><%= book.author %></td>
         <td><%= book.status %></td>
         <td><%= link_to 'Show', book %></td>
+        <%@user=User.find_by_id(session[:current_user_id])%>
+        <%if(@user.user_type=='A' || @user.user_type=='P')%>
         <td><%= link_to 'Edit', edit_book_path(book) %></td>
-        <td><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <td><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <%end%>
+
         <% if book.status == 'Available' %>
         <td>  <%= link_to 'Checkout', book, method: :checkout, data: { confirm: 'Are you sure?' } %></td>
-        <% else %>
+            <%end%>
+        <% if book.status == 'Checked out'%>
+            <%@checkout_history=CheckoutHistory.find_by_ISBN(book.ISBN)%>
+
+            <%if !@checkout_history.nil? %>
+                    <%if(@checkout_history.email== @user.email)%>
+
             <td>  <%= link_to 'Return', book, method: :checkout, data: { confirm: 'Are you sure?' } %></td>
       <% end %>
+            <%end%>
+            <%end%>
       </tr>
     <% end %>
   </tbody>
@@ -37,4 +49,7 @@
 
 <br>
 
+<%@user=User.find_by_id(session[:current_user_id])%>
+<%if(@user.user_type=='A' || @user.user_type=='P')%>
 <%= link_to 'New Book', new_book_path %>
+<%end%>
