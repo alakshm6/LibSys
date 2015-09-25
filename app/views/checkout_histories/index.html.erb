@@ -13,21 +13,31 @@
     </tr>
   </thead>
 
+  <%@user=User.find_by_id(session[:current_user_id])%>
   <tbody>
     <% @checkout_histories.each do |checkout_history| %>
       <tr>
+
+        <%if(checkout_history.email==@user.email)%>
         <td><%= checkout_history.email %></td>
         <td><%= checkout_history.ISBN %></td>
         <td><%= checkout_history.checkout_timestamp %></td>
         <td><%= checkout_history.return_timestamp %></td>
         <td><%= link_to 'Show', checkout_history %></td>
-        <td><%= link_to 'Edit', edit_checkout_history_path(checkout_history) %></td>
-        <td><%= link_to 'Destroy', checkout_history, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%end%>
+
+        <%if(@user.user_type=='A' || @user.user_type=='P')%>
+            <td><%= link_to 'Edit', edit_checkout_history_path(checkout_history) %></td>
+            <td><%= link_to 'Destroy', checkout_history, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <%end%>
+
+
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
-
+<%if(@user.user_type=='A' || @user.user_type=='P')%>
 <%= link_to 'New Checkout history', new_checkout_history_path %>
+<%end%>

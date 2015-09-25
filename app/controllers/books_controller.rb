@@ -105,7 +105,7 @@ class BooksController < ApplicationController
       @book.status = 'Checked out'
 
 
-      if (@user.user_type == 'A')
+      if (@user.user_type == 'A' || @user.user_type == 'P')
 
         @checkout_history = CheckoutHistory.new(:ISBN => @book.ISBN, :checkout_timestamp => DateTime.now.utc, :return_timestamp => DateTime.new(9999,12,31).utc)
         @book.save
@@ -177,6 +177,8 @@ class BooksController < ApplicationController
 
     @book_count = @books.count
   end
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

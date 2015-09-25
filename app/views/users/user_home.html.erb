@@ -1,11 +1,14 @@
 <%= provide(:title, "Welcome") %>
 <%= link_to 'View my profile', user_path(session[:current_user_id]) %>
 <%= link_to 'Edit my profile', edit_user_path(session[:current_user_id]) %>
+
+
 <%= link_to 'Search for a  book', books_path %>
-<%= link_to 'Checkout a book', books_path %>
-<%= link_to 'Return a book', books_path %>
+
+<%= link_to 'Checkout/Return a book', books_path %>
+
 <%= link_to 'View list of books', books_path %>
 
 <% @user=User.find_by_id(session[:current_user_id])%>
 <% @checkout_history=CheckoutHistory.where(@user.email)%>
-<%= link_to 'View my Checkout history', checkout_histories_path %>
+<%= link_to 'View my checkout history', checkout_histories_path %>

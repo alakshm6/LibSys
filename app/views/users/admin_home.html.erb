@@ -2,8 +2,9 @@
 <%= link_to 'View my profile', user_path(session[:current_user_id]) %>
 <%= link_to 'Edit my profile', edit_user_path(session[:current_user_id]) %>
 <%= link_to 'Add new Admin',   new_user_path %>
-<%= link_to 'View list of admins', admin_index_path%>
+<%= link_to 'View list/Delete admins', admin_index_path%>
 <%= link_to 'Add new book', new_book_path %>
+<%= link_to 'Checkout/Return book', books_path%>
 <%= link_to 'View list of books', books_path %>
 <%= link_to 'View book details', books_path %>
 <%= link_to 'View Checkout History for a book', checkout_histories_path %>

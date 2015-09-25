@@ -14,21 +14,26 @@
   </style>
 </head>
 <body>
-<% if !current_page?(login_path) && !session[:current_user_id].nil? %>
-    <% if ['A','P'].include?(User.find_by_id(session[:current_user_id]).user_type) %>
-        <%= link_to 'Home', admin_home_path %>
-    <% else %>
-        <%= link_to 'Home', user_home_path %>
-    <%end%>
-<%= link_to 'Signout', logout_path %>
-<%end%>
+
 <div class="container">
+
+  <% if !current_page?(login_path) && !session[:current_user_id].nil? %>
+      <% if ['A','P'].include?(User.find_by_id(session[:current_user_id]).user_type) %>
+          <%= link_to 'Home', admin_home_path %>
+      <% else %>
+          <%= link_to 'Home', user_home_path %>
+      <%end%>
+      <%= link_to 'Signout', logout_path %>
+  <%end%>
 
   <% flash.each do |name, msg| %>
       <%= content_tag :div, msg, :id => "flash_#{name}" %>
   <% end %>
   <%= yield %>
 </div>
+
+
+
 </body>
 <div class="footer">Developed by : Ashwin Gauri Abbas</div>
 </html>
