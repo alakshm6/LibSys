@@ -5,6 +5,13 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
+  <style>
+      table , td , thead
+      {
+          border : 1px solid black ;
+          border-collapse : collapse ;
+      }
+  </style>
 </head>
 <body>
 <% if !current_page?(login_path) && !session[:current_user_id].nil? %>

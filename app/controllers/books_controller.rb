@@ -10,7 +10,7 @@ class BooksController < ApplicationController
   # GET /books/1
   # GET /books/1.json
   def show
-    @book = Book.where(id: params[:id])
+  #@book = Book.where(id: params[:id])
   end
 
   # GET /books/new
@@ -103,18 +103,21 @@ class BooksController < ApplicationController
 
     if status == 'Available'
       @book.status = 'Checked out'
-      @book.save
+
 
       if (@user.user_type == 'A')
 
         @checkout_history = CheckoutHistory.new(:ISBN => @book.ISBN, :checkout_timestamp => DateTime.now.utc, :return_timestamp => DateTime.new(9999,12,31).utc)
+        @book.save
         @checkout_history.save
+
         respond_to do |format|
               format.html { render :checkout_details }
               format.json { render json: @book }
             end
       else
          @checkout_history = CheckoutHistory.new(:email => @user.email, :ISBN => @book.ISBN, :checkout_timestamp => DateTime.now.utc, :return_timestamp => DateTime.new(9999,12,31).utc)
+         @book.save
          @checkout_history.save
          respond_to do |format|
            format.html { redirect_to books_url, notice: 'Book was successfully checked out.' }
@@ -139,6 +142,40 @@ class BooksController < ApplicationController
 
   def checkout_details
 
+  end
+
+  def search
+
+    session[:my_previous_url] = URI(request.referer || '').path
+    @back_url = session[:my_previous_url]
+
+  end
+
+  def search_display
+
+    value = params[:search_value].to_s.strip.squeeze
+
+    session[:my_previous_url] = URI(request.referer || '').path #taken from stackoverflow
+    @back_url = session[:my_previous_url] #taken from stackoverflow
+
+    if params[:search_type]=='isbn'
+      @books=Book.where('ISBN LIKE ?' , "%#{value}%")
+      @book_count=Book.where('ISBN LIKE ?' , "%#{value}%").count
+
+    elsif params[:search_type]=='title'
+      @books=Book.where('title LIKE ?' , "%#{value}%")
+
+    elsif params[:search_type]=='author'
+      @books=Book.where('author LIKE ?' , "%#{value}%")
+
+    elsif params[:search_type]=='description'
+      @books=Book.where('description LIKE ?' , "%#{value}%")
+
+    else
+      @books=Book.where( status: 'Available')
+    end
+
+    @book_count = @books.count
   end
 
   private

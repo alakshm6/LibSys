@@ -11,10 +11,11 @@ Rails.application.routes.draw do
   resources :users
 
   resources :books
-
+  get 'books/search/' => 'books#search'
+  post 'books/search_display/' => 'books#search_display'
 
   post '/books/:id' => 'books#checkout'
-  get '/books/:id' => 'books#capture_details'
+  
 
 
 

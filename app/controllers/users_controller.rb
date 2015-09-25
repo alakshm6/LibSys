@@ -54,6 +54,8 @@ class UsersController < ApplicationController
       elsif check_if_admin
         @user = User.new(user_params)
         if @user.save
+          #Tell the UserMailer to send a welcome email after save
+          UserMailer.welcome_email(@user).deliver_later
           redirect_to admin_home_path, notice: 'User was successfully created'
         else
           render :new
@@ -65,6 +67,8 @@ class UsersController < ApplicationController
       @user = User.new(user_params)
       respond_to do |format|
         if @user.save
+          #Tell the UserMailer to send a welcome email after save
+          UserMailer.welcome_email(@user).deliver_later
           if session[:current_user_id].nil?
             format.html { redirect_to login_path, notice: 'User was successfully created.Login to access the system' }
           else
@@ -132,6 +136,8 @@ class UsersController < ApplicationController
       end
     end
   end
+
+
 
   def admin_home
     if !check_if_user

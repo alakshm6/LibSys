@@ -5,4 +5,7 @@
 <%= link_to 'Checkout a book', books_path %>
 <%= link_to 'Return a book', books_path %>
 <%= link_to 'View list of books', books_path %>
+
+<% @user=User.find_by_id(session[:current_user_id])%>
+<% @checkout_history=CheckoutHistory.where(@user.email)%>
 <%= link_to 'View my Checkout history', checkout_histories_path %>

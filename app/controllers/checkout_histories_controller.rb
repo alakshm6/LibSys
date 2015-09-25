@@ -10,6 +10,8 @@ class CheckoutHistoriesController < ApplicationController
   # GET /checkout_histories/1
   # GET /checkout_histories/1.json
   def show
+
+
   end
 
   # GET /checkout_histories/new
