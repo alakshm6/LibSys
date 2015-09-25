@@ -5,7 +5,7 @@
 To create the preconfigured admin, run the following commands in the Rubymine terminal:
 
 <tt> 
-rails console <br>
+rails console \n
 u = User.create :name => "ABC" ,:password => "adminpass",  :email => "main_admin@libsys.com", :user_type => "P" 
 </tt>     
 
