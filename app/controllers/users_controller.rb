@@ -82,7 +82,9 @@ class UsersController < ApplicationController
   def update
     if session[:current_user_id].nil?
       redirect_to login_path, notice: "Only logged in admins can edit admins"
-    elsif user_params[:email] != User.find_by_id(session[:current_user_id]).email
+    elsif params[:id].to_s != User.find_by_id(session[:current_user_id]).id.to_s
+      puts "User ID :" + params[:id]
+      puts "Session ID : " + User.find_by_id(session[:current_user_id]).id.to_s
       if check_if_user
         redirect_to user_home_path,notice: "Users do not have permissions to update other users"
       elsif check_if_admin
@@ -116,9 +118,13 @@ class UsersController < ApplicationController
   # DELETE /users/1.json
   def destroy
     if check_if_admin && @user.user_type != "P" && @user.email != User.find_by_id(session[:current_user_id]).email
-      @user.destroy
-      respond_to do |format|
-        format.html { redirect_to admin_index_path, notice: 'User was successfully deleted.' }
+      if CheckoutHistory.where(email: @user.email).where(return_timestamp: DateTime.new(9999,12,31).utc).nil?
+        @user.destroy
+        respond_to do |format|
+          format.html { redirect_to admin_index_path, notice: 'User was successfully deleted.' }
+        end
+      else
+        redirect_to books_url,notice: 'User has a book checked out and hence cannot be deleted'
       end
     else
       if check_if_user

@@ -1,8 +1,10 @@
 <%= provide(:title, "Welcome") %>
-<%= link_to 'View my profile', user_path(session[:current_user_id]) %>
-<%= link_to 'Edit my profile', edit_user_path(session[:current_user_id]) %>
-<%= link_to 'Search for a  book', books_path %>
-<%= link_to 'Checkout a book', books_path %>
-<%= link_to 'Return a book', books_path %>
-<%= link_to 'View list of books', books_path %>
-<%= link_to 'View my Checkout history', checkout_histories_path %>
+<h4>My Profile</h4>
+<%= link_to 'View my profile', user_path(session[:current_user_id]) %><br/>
+<%= link_to 'Edit my profile', edit_user_path(session[:current_user_id]) %><br/>
+<h4>Enlighten me</h4>
+<%= link_to 'Search for a  book', books_search_path %><br/>
+<%= link_to 'Checkout a book', books_path %><br/>
+<%= link_to 'Return a book', books_path %><br/>
+<%= link_to 'View list of books', books_path %><br/>
+<%= link_to 'View my Checkout history', checkout_histories_path %><br/>

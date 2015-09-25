@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   post   'login'   => 'sessions#create'
   get    'logout'  => 'sessions#destroy'
 
+  get 'books/search/' => 'books#search'
+  post 'books/search_display/' => 'books#search_display'
+
+  get 'book_history' => 'checkout_histories#book_history'
+
   resources :checkout_histories
   resources :users
 
@@ -15,7 +20,6 @@ Rails.application.routes.draw do
 
   post '/books/:id' => 'books#checkout'
   get '/books/:id' => 'books#capture_details'
-
 
 
   #root 'application#index'

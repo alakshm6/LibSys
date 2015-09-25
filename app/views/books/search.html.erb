@@ -1,0 +1,29 @@
+<%= form_tag({controller: "books", action: "search_display"}, method: "post") do %>
+
+
+    <%= radio_button_tag(:search_type, "isbn" , :checked) %>
+    <%= label_tag(:search_type_isbn, "ISBN") %>
+
+    <%= radio_button_tag(:search_type, "title") %>
+    <%= label_tag(:search_type_title, "Title") %>
+
+    <%= radio_button_tag(:search_type, "author") %>
+    <%= label_tag(:search_type_author, "Author") %>
+
+    <%= radio_button_tag(:search_type, "description") %>
+    <%= label_tag(:search_type_description, "Description") %>
+
+    <%= radio_button_tag(:search_type, "available") %>
+    <%= label_tag(:search_type_available, "Available") %>
+
+
+    <input id="search_value" name="search_value" type="text" required/>
+
+    <%= submit_tag("Search") %>
+
+
+<% end %>
+
+
+<%= link_to "Back", @back_url %>
+
