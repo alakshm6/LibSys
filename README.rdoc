@@ -1,10 +1,16 @@
-# Readme for LibSys application 
+= Readme for LibSys application 
 
-#### Preconfigured admin
+== Preconfigured admin
 
 To create the preconfigured admin, run the following commands in the Rubymine terminal:
-```
-rails console
-u = User.create :name => "ABC" ,:password => "adminpass",  :email => "main_admin@libsys.com", :user_type => "P"
-```
+
+$ rails console
+$ u = User.create :name => "ABC" ,:password => "adminpass",  :email => "main_admin@libsys.com", :user_type => "P"
+
+== Functionalities for each user
+
+* Admin
+First, a preconfigured admin is created who can create other admins. An admin can also create new admins after the admin has signed in. 
+
+
 
