@@ -23,8 +23,8 @@ We shall go over the use cases to understand how they have been modelled in the 
 
 The preconfigured admin has already been created. 
 name: pqr
-email: pqr@gmail.com
-password: pqr
+email: xyz@gmail.com
+password: abc
 user_type:P
 
 === Functionalities for each user
