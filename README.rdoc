@@ -45,8 +45,8 @@ First, a preconfigured admin is created who can create other admins. An admin ca
 =======================================
 Admins
 =======================================
-*	My Profile
-	*	Login
+* My Profile
+	*       Login
 		An admin will be login to the system by keying in his email and password on the login page. There are a few preconditions for him to get logged in to the page.
 		First of them is that the admin needs to be registered in the Library database before trying to login.
 	
