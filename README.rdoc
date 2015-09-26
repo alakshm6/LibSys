@@ -1,14 +1,10 @@
 == Readme for LibSys application 
-=======================================
-How to run "LibSys"
-=======================================
+
+===How to run "LibSys"
 
 The app is hosted in AWS and can be run by running the following command.
-=======================================
 
-=======================================
-Design Decisions and Project Issues
-=======================================
+===Design Decisions and Project Issues
 
 The chief design decision to be taken was about the data model. We decided to merge the Admins and the Library members
 into one single table and assign user types to them which would help distinguish them apart. The other tables involved the 
@@ -25,26 +21,17 @@ We shall go over the use cases to understand how they have been modelled in the 
 
 === Preconfigured admin
 
-To open the rails console in the Rubymine terminal, run the following command:
+The preconfigured admin has already been created. 
+name: abc
+email: xyz@com
+password: abc
+user_type:P
 
-<tt> rails console 
-</tt>
-
-To create the preconfigured admin run the following command:
-
-<tt>
-u = User.create :name => "ABC" ,:password => "adminpass",  :email => "main_admin@libsys.com", :user_type => "P" 
-</tt>
-
-== Functionalities for each user
+=== Functionalities for each user
 
 * Admin
 First, a preconfigured admin is created who can create other admins. An admin can also create new admins after the admin has signed in. 
 
-
-=======================================
-Admins
-=======================================
 * My Profile
 	*       Login
 		An admin will be login to the system by keying in his email and password on the login page. There are a few preconditions for him to get logged in to the page.
@@ -115,11 +102,7 @@ Manage users
 	*	Adding user
 		New users need to sign up themselves and admins cannot create new users.
 
-
-
-=========================================
-Users
-=========================================
+* Users
 
 	*	Signup
 		A user will be able to sign up by clicking on the new user sign up link on the login page. This will redirect the user to a new user form. While filling the form if a user is not logged
@@ -139,7 +122,7 @@ Users
 		First of them is that the user needs to be registered in the Library database before trying to login.
 
 
-*	Englithen me
+*	Enlighten me
 	
 	*	Search for a book
 		The user will be able to search for a book based on ISBN,Author,Title,Description and Availability. This will list all the books matching that criteria. The search value should be
