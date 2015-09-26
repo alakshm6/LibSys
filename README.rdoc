@@ -1,4 +1,27 @@
 == Readme for LibSys application 
+=======================================
+How to run "LibSys"
+=======================================
+
+The app is hosted in AWS and can be run by running the following command.
+=======================================
+
+=======================================
+Design Decisions and Project Issues
+=======================================
+
+The chief design decision to be taken was about the data model. We decided to merge the Admins and the Library members
+into one single table and assign user types to them which would help distinguish them apart. The other tables involved the 
+Books table and the Checkout History table. We chose to model the books, users and checkout history as separate entities rather than
+a relationship between books and users.
+
+We have used the Session store from Rails as a medium for storing session details and the Bcrypt library for encrypting password.
+The Bcrypt library takes care of the encryption and validations on password. We have chosen to create a session for each logged in user
+so as to implement permissioning for various pages. For example, a normal user should not be able to access the admin_home page and alike.
+In addition to that, we have ensured that a non-logged in user cannot access any page apart from the new user page so that we have specific
+controls over the data being shown and manipulated.
+
+We shall go over the use cases to understand how they have been modelled in the system to use it better.
 
 === Preconfigured admin
 
@@ -18,31 +41,6 @@ u = User.create :name => "ABC" ,:password => "adminpass",  :email => "main_admin
 * Admin
 First, a preconfigured admin is created who can create other admins. An admin can also create new admins after the admin has signed in. 
 
-=======================================
-How to run "LibSys"
-=======================================
-
-The app is hosted in AWS and can be run by running the following command.
-=======================================
-
-
-
-=======================================
-Design Decisions and Project Issues
-=======================================
-
-The chief design decision to be taken was about the data model. We decided to merge the Admins and the Library members
-into one single table and assign user types to them which would help distinguish them apart. The other tables involved the 
-Books table and the Checkout History table. We chose to model the books, users and checkout history as separate entities rather than
-a relationship between books and users.
-
-We have used the Session store from Rails as a medium for storing session details and the Bcrypt library for encrypting password.
-The Bcrypt library takes care of the encryption and validations on password. We have chosen to create a session for each logged in user
-so as to implement permissioning for various pages. For example, a normal user should not be able to access the admin_home page and alike.
-In addition to that, we have ensured that a non-logged in user cannot access any page apart from the new user page so that we have specific
-controls over the data being shown and manipulated.
-
-We shall go over the use cases to understand how they have been modelled in the system to use it better.
 
 =======================================
 Admins
