@@ -18,5 +18,149 @@ u = User.create :name => "ABC" ,:password => "adminpass",  :email => "main_admin
 * Admin
 First, a preconfigured admin is created who can create other admins. An admin can also create new admins after the admin has signed in. 
 
+=======================================
+How to run "LibSys"
+=======================================
+
+The app is hosted in AWS and can be run by running the following command.
+=======================================
+
+
+
+=======================================
+Design Decisions and Project Issues
+=======================================
+
+The chief design decision to be taken was about the data model. We decided to merge the Admins and the Library members
+into one single table and assign user types to them which would help distinguish them apart. The other tables involved the 
+Books table and the Checkout History table. We chose to model the books, users and checkout history as separate entities rather than
+a relationship between books and users.
+
+We have used the Session store from Rails as a medium for storing session details and the Bcrypt library for encrypting password.
+The Bcrypt library takes care of the encryption and validations on password. We have chosen to create a session for each logged in user
+so as to implement permissioning for various pages. For example, a normal user should not be able to access the admin_home page and alike.
+In addition to that, we have ensured that a non-logged in user cannot access any page apart from the new user page so that we have specific
+controls over the data being shown and manipulated.
+
+We shall go over the use cases to understand how they have been modelled in the system to use it better.
+
+=======================================
+Admins
+=======================================
+*	My Profile
+	*	Login
+		An admin will be login to the system by keying in his email and password on the login page. There are a few preconditions for him to get logged in to the page.
+		First of them is that the admin needs to be registered in the Library database before trying to login.
+	
+	*	Editing Profile
+		An admin will be able to edit his own profile by clicking on the "Edit my profile" on the admin home page. The admin would be allowed to change the password
+		and name. But the admin would not be able to update its email id because it is a primary key in the table and also that we reckon that the email id for a user
+		remains same throughout his membership with the Library and hence does not require a change. An admin will not be allowed edit either another admin or user's profile.
+
+	*	Logout
+		The admin will be able to logout from his profile by clicking on "Signout" on each of the pages he navigates to. He/she will then be redirected back to the
+		user login page. Logging out will also clear the session data for that particular user and hence trying to access any other admin specific page would not be loaded.
+		Navigating to an external page while logged in, would keep the session as is and would still allow the user to access the pages once he tries to navigate the app pages.
+
+*	Manage Admins
+	*	Create new admin
+		An admin would be able to create a new admin, whether a general admin or a pre configured one. To access the page to create the new admin, the admin
+		needs to access "Add an admin" from the Manage Admin tab in Admin home page. Appropriate validations are put in place to ensure noisy data does not enter the database.
+		For example, the user type can only be one among the list [U,A,P] and the email being entered should not be present in the database prior to this. A user cannot add
+		another user/admin by accessing the new user form.
+
+	*	View list of admins
+		An admin would be able to view the list of all admins in the Library system, by navigating to the "View List of admins". This would pull a list of all the
+		admins be it a normal admin or a preconfigured admin. The view list of admins throws up a host of other functions that can be performed by the admin like deletion of admins,
+		addition of new admins and viewing admin specific data. The password of the other admins being viewed is hidden for security reasons. There is no destroy option for
+		the pre configured admins to ensure they are not deleted.
+
+	*	Delete other admins
+		An admin will be able to delete other admins from the list of admins page by clicking on the Destroy link corresponding to an admin listed on the page. There a few cases which
+		need to be ensured for a successful deletion of an admin. The admin being deleted should not have any book already checked out under his name. If that is the case a message pops
+		up on the screen saying "User cannot be deleted because there is a book checked out under his name".
+		Furthermore, an admin will not be allowed to delete himself and a pre configured admin. Attempts to do so will throw eror messages saying "Admins cannot delete themselves".
+	
+
+*	Library Management
+	*	Add new book
+		Only an admin will be allowed to add a new book. The book needs to have an exactly 13 digit ISBN number, neither less nor more than that. While creating a book,
+		the status should be set to "Available" only. The system does not default to it. Failure to do so will lead to abnormal behaviour with respect to functions corresponding to the books.
+
+	*	View list of books
+		Admins can view the list of all books and this would include both the available and checked out books. Clicking on checkout corresponding to an available book
+		will take to a page which displays the book details and also prompts for the user name to be checked out under. In this case, if the admin is checking out on
+		his behalf he needs to enter his own email id. Also the email id being entered here is not validated against its presence/absence in the database.
+
+	*	View the details of a book
+		There is no separate link developed for viewing the details of a book. Clicking on the "View details of a book"  will link to books index. Clicking on show
+		corresponding to a book will only show the details of a book. This currently does not show the details of who owns the book currently.
+	
+	*	Edit the details of a book
+		Only the admin is allowed to edit the details of a book. The admin needs to update all the required fields but should not modify the isbn field. The status
+		field should not be updated until the admin is returning the book on behalf of a user.
+
+
+	*	Admin changing status of a book	
+		Admin is allowed to change the status of a book on behalf of a user by clicking on checkout or return.
+
+	*	Delete a book
+		The admin can delete a book only if it is not checked out by anyone else at the time of deletion. If it is already checked out by someone then the delete would not be allowed.
+		Deleting a book will not delete all entries corresponding to it in the checkout history. We have avoided that because we felt the checkout history is important for other logging
+		and analysis purposes as part of future although it does not fall within the scope of the project. 
+
+Manage users
+	*	Deleting a user
+		The admin will be able to delete a user only if he does not have any book checked out under his name. The deletion will not be allowed otherwise. This again, as above,
+		will not delete entries from the checkout history table.
+
+	*	Adding user
+		New users need to sign up themselves and admins cannot create new users.
+
+
+
+=========================================
+Users
+=========================================
+
+	*	Signup
+		A user will be able to sign up by clicking on the new user sign up link on the login page. This will redirect the user to a new user form. While filling the form if a user is not logged
+		in then he can only create a user of type U. The user cannot create any other user type until he is logged in as an admin. Appropriate validations are in place to check the email is valid and corresponds
+		to the specified format.
+
+	*	Edit my profile
+		A user can edit his profile by changing the name and the password only. Attempt to change the email or the user type is not enteratained owing to the database design.
+		A user cannot be allowed to edit other admins profile by providing a link to another admin's edit page.
+
+	*	Logout
+		The user in will be able to logout from his profile by clicking on "Signout" on each of the pages he navigates to. He/she will then be redirected back to the
+		user login page. Logging out will also clear the session data for that particular user and hence trying to access any other user specific page would not be loaded
+
+	*	Login
+		A user will be able to login to the system by keying in his email and password on the login page. There are a few preconditions for him to get logged in to the page.
+		First of them is that the user needs to be registered in the Library database before trying to login.
+
+
+*	Englithen me
+	
+	*	Search for a book
+		The user will be able to search for a book based on ISBN,Author,Title,Description and Availability. This will list all the books matching that criteria. The search value should be
+		substring of the value in the field and is case insensitive.
+	
+	*	View details of a book
+		The user can view details of a book by clicking on show corresponding to a book on the books index page.
+
+	*	Checkout an available book
+		The user can checkout an available book. This will set the return date corresponding to the book and the user email in checkout history as 31-12-9999.
+		Upon returning this will be reset to the current timestamp. The user can also checkout a book through help from admin. 
+
+	*	Return a book
+		The user can return a book by going to the books index page and the return date would be updated. An admin can do the same for a user and it will update the return_timestamp.
+
+	*	View my checkout history
+		A library member can view his checkout history by clicking on the view my checkout history tab.
+
+
+
 
 
