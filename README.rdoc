@@ -2,7 +2,7 @@
 
 ===How to run "LibSys"
 
-The app is hosted in AWS and can be run by running the following command.
+The app is deployed and running on EC2 instance in AWS.
 
 ===Design Decisions and Project Issues
 
@@ -141,7 +141,6 @@ Manage users
 	*	View my checkout history
 		A library member can view his checkout history by clicking on the view my checkout history tab.
 
-
-
-
+===Testing===
+The test cases written for model are present in the test/model folder and the test cases for the controller are present in the test/controller folder. The files are named as user_test.rb and user_controller_test.rb respectively.
 
