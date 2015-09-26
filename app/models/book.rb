@@ -6,5 +6,5 @@ class Book < ActiveRecord::Base
   validates :description, presence: true, length: {within: 2..500}
   validates :author, presence: true, length: {within: 2..200}
   validates :status, presence: true
-
+  validates_uniqueness_of :ISBN
 end

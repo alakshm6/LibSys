@@ -36,10 +36,13 @@
             <%@checkout_history=CheckoutHistory.find_by_ISBN(book.ISBN)%>
 
             <%if !@checkout_history.nil? %>
-                    <%if(@checkout_history.email== @user.email)%>
+                    <%if(@checkout_history.email== @user.email || @user.user_type=='A' || @user.user_type=='P' )%>
 
             <td>  <%= link_to 'Return', book, method: :checkout, data: { confirm: 'Are you sure?' } %></td>
-      <% end %>
+                   
+
+
+                <% end %>
             <%end%>
             <%end%>
       </tr>

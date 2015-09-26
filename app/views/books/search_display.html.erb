@@ -62,7 +62,9 @@
         <td><%= book.description %></td>
         <td><%= book.author %></td>
         <td><%= book.status %></td>
+        <td><%= link_to 'Checkout History',book,{:controller=>"checkout_histories",:action=>'book_history',method: :book_history }%><td/>
       </tr>
+
   <% end %>
   </tbody>
 </table>

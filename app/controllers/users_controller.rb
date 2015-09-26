@@ -62,7 +62,7 @@ class UsersController < ApplicationController
         end
       end
     elsif  user_params[:user_type] == 'U' && !(session[:current_user_id].nil?)
-      redirect_to user_home_path, notice: "No sufficient permissions to add new users"
+      redirect_to admin_home_path, notice: "No sufficient permissions to add new users"
     else
       @user = User.new(user_params)
       respond_to do |format|
@@ -121,29 +121,54 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    if check_if_admin && @user.user_type != "P" && @user.email != User.find_by_id(session[:current_user_id]).email
-      if CheckoutHistory.where(email: @user.email).where(return_timestamp: DateTime.new(9999,12,31).utc).nil?
+    id=session[:current_user_id];
+
+    @user1=User.find(id)
+    x= @user.email
+    y= @user1.email
+    if check_if_admin  && !(["P"].include?@user.user_type   || x.eq?(y))
+      @checkout_histories=CheckoutHistory.find_by_email(x)
+      if(@checkout_histories.nil?)
         @user.destroy
         respond_to do |format|
-          format.html { redirect_to admin_index_path, notice: 'User was successfully deleted.' }
+          format.html { redirect_to users_path, notice: 'User was successfully deleted.' }
         end
+
       else
-        redirect_to books_url,notice: 'User has a book checked out and hence cannot be deleted'
+        flag=0;
+        @checkout_histories.each do |checkout_history|
+          if(checkout_history.return_timestamp == DateTime.new(9999,12,31).utc)
+
+            flag=1;
+          end
+        end
+        if(flag==0)
+          @user.destroy
+          respond_to do |format|
+            format.html { redirect_to users_path, notice: 'User was successfully deleted.' }
+          end
+
+        else
+          respond_to do |format|
+            redirect_to users_path,notice: 'User has a book checked out and hence cannot be deleted'
+          end
+
+        end
       end
+
     else
       if check_if_user
-      respond_to do |format|
-        format.html { redirect_to user_home_path, notice: 'User cannot be deleted or there is no authorization to do so' }
-      end
+        respond_to do |format|
+          format.html { redirect_to user_home_path, notice: 'User cannot be deleted or there is no authorization to do so' }
+        end
       elsif check_if_admin && @user.email == User.find_by_id(session[:current_user_id]).email
         redirect_to admin_home_path, notice: 'Admins cannot delete themselves'
       else
         redirect_to login_path, notice: 'User cannot be deleted or there is no authorization to do so'
       end
     end
+
   end
-
-
 
   def admin_home
     if !check_if_user
@@ -178,5 +203,5 @@ class UsersController < ApplicationController
     def check_if_pre_configured_admin
       return true if User.find_by_id(session[:current_user_id]).user_type == 'P'
     end
-
 end
+

@@ -18,7 +18,7 @@
     <% @checkout_histories.each do |checkout_history| %>
       <tr>
 
-        <%if(checkout_history.email==@user.email)%>
+        <%if(checkout_history.email==@user.email || @user.user_type=='A' || @user.user_type=='P')%>
         <td><%= checkout_history.email %></td>
         <td><%= checkout_history.ISBN %></td>
         <td><%= checkout_history.checkout_timestamp %></td>

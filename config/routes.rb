@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   get 'books/search/' => 'books#search'
   post 'books/search_display/' => 'books#search_display'
 
+
   get 'book_history' => 'checkout_histories#book_history'
 
   resources :checkout_histories

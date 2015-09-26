@@ -63,6 +63,11 @@ class CheckoutHistoriesController < ApplicationController
     end
   end
 
+  def book_history
+
+    @checkout_histories = CheckoutHistory.find_by_id(params[:id])
+  end
+  helper_method :book_history
 
   private
     # Use callbacks to share common setup or constraints between actions.

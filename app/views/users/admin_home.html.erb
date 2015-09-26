@@ -11,7 +11,8 @@
 <%= link_to 'Add new book', new_book_path %><br/>
 <%= link_to 'View list of books', books_path %><br/>
 <%= link_to 'View book details', books_search_path %><br/>
-<%= link_to 'View Checkout History for a book', checkout_histories_path %><br/>
+<%= link_to 'View Checkout History for a book', controller: "books", action: "search", method: "get" %><br/>
+<%= link_to 'Checkout/Return books', books_path %>
 <br/>
 <h4>Library Members</h4>
 <%= link_to 'View Checkout history for a user', checkout_histories_path %><br/>
