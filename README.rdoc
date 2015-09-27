@@ -22,9 +22,9 @@ We shall go over the use cases to understand how they have been modelled in the 
 === Preconfigured admin
 
 The preconfigured admin has already been created. 
-name: pqr
-email: pqr@gmail.com
-password: pqr
+name: xyz
+email: xyz@gmail.com
+password: abc
 user_type:P
 
 === Functionalities for each user
