@@ -15,7 +15,7 @@ class BooksController < ApplicationController
   # GET /books/new
   def new
     if check_if_admin
-      @book = Book.new
+      @book = Book.new(:status=>'Available')
     elsif check_if_user
       respond_to do |format|
         format.html{redirect_to user_home_path, notice: 'Users cannot add new books.'}
@@ -119,7 +119,7 @@ class BooksController < ApplicationController
          @book.save
          @checkout_history.save
          respond_to do |format|
-           format.html { redirect_to books_url, notice: 'Book was successfully checked out.' }
+           format.html { redirect_to user_home_path, notice: 'Book was successfully checked out.' }
            format.json { head :no_content }
          end
       end
@@ -129,11 +129,18 @@ class BooksController < ApplicationController
       @checkout_history = CheckoutHistory.find_by(ISBN: @book.ISBN)
       @checkout_history.return_timestamp = DateTime.now.utc
       @checkout_history.save
+      if check_if_admin
       respond_to do |format|
-        format.html { redirect_to books_url, notice: 'Book was successfully returned.' }
+        format.html { redirect_to admin_home_path, notice: 'Book was successfully returned.' }
         format.json { head :no_content }
       end
+      else
+        respond_to do |format|
+          format.html { redirect_to user_home_path, notice: 'Book was successfully returned.' }
+          format.json { head :no_content }
+        end
 
+    end
     end
     end
 
@@ -176,6 +183,14 @@ class BooksController < ApplicationController
 
     @book_count = @books.count
   end
+
+  def history
+
+    @book = Book.find(params[:id])
+  end
+
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

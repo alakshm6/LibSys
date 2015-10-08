@@ -26,11 +26,12 @@
         <%@user=User.find_by_id(session[:current_user_id])%>
         <%if(@user.user_type=='A' || @user.user_type=='P')%>
         <td><%= link_to 'Edit', edit_book_path(book) %></td>
-            <td><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-            <%end%>
+        <td><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+
+        <%end%>
 
         <% if book.status == 'Available' %>
-        <td>  <%= link_to 'Checkout', book, method: :checkout, data: { confirm: 'Are you sure?' } %></td>
+        <td>  <%= link_to 'Checkout', book, method: :post, data: { confirm: 'Are you sure?' } %></td>
             <%end%>
         <% if book.status == 'Checked out'%>
             <%@checkout_history=CheckoutHistory.find_by_ISBN(book.ISBN)%>
@@ -38,13 +39,16 @@
             <%if !@checkout_history.nil? %>
                     <%if(@checkout_history.email== @user.email || @user.user_type=='A' || @user.user_type=='P' )%>
 
-            <td>  <%= link_to 'Return', book, method: :checkout, data: { confirm: 'Are you sure?' } %></td>
-                   
+            <td>  <%= link_to 'Return', book, method: :post, data: { confirm: 'Are you sure?' } %></td>
+
 
 
                 <% end %>
             <%end%>
             <%end%>
+
+
+        <td><%= link_to "History", controller: "books", action: "history", id: book.id%></td>
       </tr>
     <% end %>
   </tbody>
@@ -54,5 +58,7 @@
 
 <%@user=User.find_by_id(session[:current_user_id])%>
 <%if(@user.user_type=='A' || @user.user_type=='P')%>
-<%= link_to 'New Book', new_book_path %>
+<%= link_to 'Back', admin_home_path %>
+<%elsif (@user.user_type=='U')%>
+<%= link_to 'Back', user_home_path %>
 <%end%>

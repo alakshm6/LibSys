@@ -1,0 +1,37 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Checkout Histories</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Email</th>
+    <th>Isbn</th>
+    <th>Checkout timestamp</th>
+    <th>Return timestamp</th>
+    <th colspan="3"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <%if @checkout_histories=CheckoutHistory.all%>
+
+      <% @checkout_histories.each do |checkout_history| %>
+
+
+          <%if checkout_history.email == @user.email%>
+              <tr>
+                <td><%= checkout_history.email %></td>
+                <td><%= checkout_history.ISBN %></td>
+                <td><%= checkout_history.checkout_timestamp %></td>
+                <td><%= checkout_history.return_timestamp %></td>
+
+              </tr>
+          <%end%>
+      <% end %>
+  <%end%>
+  </tbody>
+</table>
+
+<br>
+

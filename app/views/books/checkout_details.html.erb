@@ -32,7 +32,9 @@
 <%= form_for(@checkout_history) do |f|%>
     <div class="field">
       <%= f.label :email %><br>
-      <%= f.text_field :email %>
+      <% users_array = User.all.map { |user| [user.email] } %>
+      <%= f.select(:email,options_for_select(users_array)) %><br>
+
     </div>
 
     <div class="actions">

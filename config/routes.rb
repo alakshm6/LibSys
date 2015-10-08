@@ -10,18 +10,29 @@ Rails.application.routes.draw do
   get 'books/search/' => 'books#search'
   post 'books/search_display/' => 'books#search_display'
 
+  get 'books/history/:id' => 'books#history'
 
-  get 'book_history' => 'checkout_histories#book_history'
+  get 'users/history/:id' => 'users#history'
+
+
 
   resources :checkout_histories
   resources :users
 
   resources :books
+  get 'books/history/:id' => 'books#history'
+  get 'users/history/:id' => 'users#history'
+
   get 'books/search/' => 'books#search'
   post 'books/search_display/' => 'books#search_display'
 
+
+
   post '/books/:id' => 'books#checkout'
-  
+
+
+
+
 
 
   #root 'application#index'

@@ -16,5 +16,10 @@
 </p>
 
 <%= link_to 'Edit', edit_user_path(@user) %>
-<%= link_to 'Back', admin_index_path%>
+<%if @user.user_type=='P' || @user.user_type=='A' %>
+<%= link_to 'Back', admin_home_path%>
+<%end%>
+<%if @user.user_type=='U' %>
+<%= link_to 'Back', user_home_path%>
+<%end%>
 

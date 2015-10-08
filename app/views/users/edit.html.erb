@@ -3,4 +3,9 @@
 <%= render 'form' %>
 
 <%= link_to 'Show', @user %> |
-<%= link_to 'Back', :back %>
+<%@user=User.find_by_id(session[:current_user_id])%>
+<%if(@user.user_type=='A' || @user.user_type=='P')%>
+    <%= link_to 'Back', admin_home_path %>
+<%elsif (@user.user_type=='U')%>
+    <%= link_to 'Back', user_home_path %>
+<%end%>

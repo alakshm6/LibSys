@@ -19,8 +19,13 @@
         <td><%= user.name %></td>
         <td><%= user.user_type %></td>
         <td><%= link_to 'Show', user %></td>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% if user.user_type == "U"%>
+            <%if session[:current_user_id]!=user.id%>
+                <td><%= link_to 'Edit', edit_user_path(user) %></td>
+                <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            <%end%>
+        <%end%>
+        <td><%= link_to "History", controller: "users", action: "history", id: user.id%></td>
       </tr>
     <% end %>
   </tbody>
@@ -28,4 +33,3 @@
 
 <br>
 
-<%= link_to 'New User', new_user_path %>
