@@ -22,7 +22,7 @@
         <% if user.user_type == "A"%>
           <%if session[:current_user_id]!=user.id%>
         <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy',controller: "users", action: "delete_admin",id: user.id, data: { confirm: 'Are you sure?' } %></td>
         <%end%>
             <%end%>
       </tr>

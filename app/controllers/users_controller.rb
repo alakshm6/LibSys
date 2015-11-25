@@ -140,7 +140,7 @@ class UsersController < ApplicationController
       if @checkout_histories.nil?
       @user.destroy
     respond_to do |format|
-      format.html { redirect_to admin_index_path, notice: 'User was successfully destroyed.' }
+      format.html { redirect_to users_path, notice: 'User was successfully destroyed.' }
       format.json { head :no_content }
     end
 
@@ -157,6 +157,45 @@ class UsersController < ApplicationController
           if !(checkout_history.return_timestamp=='9999-12-31T00:00:00+00:00')
           @user.destroy
           respond_to do |format|
+            format.html { redirect_to users_path, notice: 'User was successfully destroyed.' }
+            format.json { head :no_content }
+          end
+          else
+            respond_to do |format|
+              format.html { redirect_to users_path, notice: 'User cannot be destroyed as he has a checked out book.' }
+              format.json { head :no_content }
+            end
+          end
+      end
+      end
+    end
+    end
+    end
+
+  def delete_admin
+if check_if_admin
+      @user=User.find_by_id(params[:id])
+      @checkout_histories=CheckoutHistory.find_by_email(@user.email);
+      if @checkout_histories.nil?
+      @user.destroy
+    respond_to do |format|
+      format.html { redirect_to admin_index_path, notice: 'User was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+
+      else
+      @checkout_histories=CheckoutHistory.all
+      @checkout_histories.each do |checkout_history|
+          if @checkout_histories.last == checkout_history
+
+          puts checkout_history.return_timestamp
+          puts DateTime.new(9999,12,31).utc
+          puts checkout_history.return_timestamp=='9999-12-31T00:00:00+00:00'
+
+
+          if !(checkout_history.return_timestamp=='9999-12-31T00:00:00+00:00')
+@user.destroy
+          respond_to do |format|
             format.html { redirect_to admin_index_path, notice: 'User was successfully destroyed.' }
             format.json { head :no_content }
           end
@@ -170,7 +209,8 @@ class UsersController < ApplicationController
       end
     end
     end
-    end
+
+end
 
   def history
     @user = User.find(params[:id])

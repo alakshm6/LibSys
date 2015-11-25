@@ -34,22 +34,23 @@
         <td>  <%= link_to 'Checkout', book, method: :post, data: { confirm: 'Are you sure?' } %></td>
             <%end%>
         <% if book.status == 'Checked out'%>
-            <%@checkout_history=CheckoutHistory.find_by_ISBN(book.ISBN)%>
-
-            <%if !@checkout_history.nil? %>
-                    <%if(@checkout_history.email== @user.email || @user.user_type=='A' || @user.user_type=='P' )%>
+            <%@checkout_history=CheckoutHistory.find_by(ISBN: book.ISBN,return_timestamp: '9999-12-31T00:00:00+00:00')%>
+             
+            <%if !@checkout_history.nil?  %>
+                    <%if (@checkout_history.email==@user.email || @user.user_type=='P' || @user.user_type=='A')%>
 
             <td>  <%= link_to 'Return', book, method: :post, data: { confirm: 'Are you sure?' } %></td>
 
 
-
-                <% end %>
+            <%end%>
+               
             <%end%>
             <%end%>
 
-
+<%if(@user.user_type=='A' || @user.user_type=='P')%>
         <td><%= link_to "History", controller: "books", action: "history", id: book.id%></td>
-      </tr>
+<%end%>  
+    </tr>
     <% end %>
   </tbody>
 </table>

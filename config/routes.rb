@@ -13,11 +13,12 @@ Rails.application.routes.draw do
   get 'books/history/:id' => 'books#history'
 
   get 'users/history/:id' => 'users#history'
-
+  get 'users/delete_admin/:id' => 'users#delete_admin'
 
 
   resources :checkout_histories
   resources :users
+  get 'users/delete_admin/:id' => 'users#delete_admin'
 
   resources :books
   get 'books/history/:id' => 'books#history'

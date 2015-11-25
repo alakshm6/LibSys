@@ -126,7 +126,7 @@ class BooksController < ApplicationController
     else
       @book.status = 'Available'
       @book.save
-      @checkout_history = CheckoutHistory.find_by(ISBN: @book.ISBN)
+      @checkout_history = CheckoutHistory.find_by(ISBN: @book.ISBN, return_timestamp: '9999-12-31T00:00:00+00:00')
       @checkout_history.return_timestamp = DateTime.now.utc
       @checkout_history.save
       if check_if_admin
@@ -159,7 +159,7 @@ class BooksController < ApplicationController
 
   def search_display
 
-    value = params[:search_value].to_s.strip.squeeze
+    value = params[:search_value].to_s.strip.squeeze(" ")
 
     session[:my_previous_url] = URI(request.referer || '').path #taken from stackoverflow
     @back_url = session[:my_previous_url] #taken from stackoverflow
